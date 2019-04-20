@@ -16,26 +16,68 @@ import java.util.Optional;
 @Component
 public interface Dao {
 
+    /**
+     * 增加课程
+     * @param course
+     * @return
+     */
     @Insert("replace into course set c_id = #{id}, classroom = #{classroom}," +
             "course = #{course}, teacher = #{teacher}, type = #{type},"+
             "sort = #{sort}, time = #{time}")
     boolean addCourse(Course course);
 
+    /**
+     * 增加学生信息
+     * @param student
+     * @return
+     */
     @Insert("INSERT into Student(xh,xm,xb,bj,zym,yxm,nj,csrq,xjzt,mz) " +
             "VALUES(#{xh},#{xm},#{xb},#{bj},#{zym},#{yxm},#{nj},#{csrq},#{xjzt},#{mz})")
     boolean addStudent(Student student);
 
+    /**
+     * 增加选课记录
+     * @param sId
+     * @param cId
+     * @return
+     */
     @Insert("insert into Record(s_id,c_id) values(#{sId},#{cId})")
-    boolean addPickCourse(@Param("sId") String sId,@Param("cId") String cId);
+    boolean addPickCourse(@Param("sId") String sId,
+                          @Param("cId") String cId);
 
+    /**
+     * 删除选课
+     * @param sId
+     * @param cId
+     * @return
+     */
     @Delete("delete from record where s_id = #{s_id} AND c_id = #{c_id}")
-    boolean deleteStudent(String sId, String cId);
+    boolean deleteRecord(String sId, String cId);
 
-    @Select("select * from record where s_id = #{sId}")
-    Optional<List<Student>> selectCoursesBySId(String sId);
+    /**
+     * 查询已选课程
+     * @param sId
+     * @return
+     */
+    @Select("SELECT c.c_id,c.course,c.teacher,c.time,c.classroom ,c.type,c.sort " +
+            "FROM course c,record r " +
+            "WHERE c.c_id = r.c_id " +
+            "AND r.s_id = #{sId}")
+    List<Course> selectCoursesBySId(String sId);
 
-    @Select("select * from course where type = #{type}")
-    Optional<List<Course>> selectCoursesByType(String type);
-
+    /**
+     * 可选课程
+     * @param type
+     * @param sId
+     * @return
+     */
+    @Select("SELECT * FROM course " +
+            "WHERE time NOT IN " +
+            "(SELECT time FROM course,record" +
+            "WHERE course.c_id = record.c_id" +
+            "AND record.s_id = #{sId}) " +
+            "AND type = #{type}")
+    Optional<List<Course>> selectCoursesByType(@Param("sId") String sId,
+                                               @Param("type") String type);
 
 }

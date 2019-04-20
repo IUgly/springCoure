@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.annotation.Generated;
 import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.regex.Matcher;
@@ -34,6 +35,7 @@ public class Course {
     @Transient
     private String rawWeek,period,weekModel,
             weekBegin,weekEnd,lesson,day;
+    @Transient
     private int[] week;
     @Transient
     private int peopleNum;
@@ -43,8 +45,20 @@ public class Course {
         private String rawWeek,period,weekModel,weekBegin,weekEnd,lesson,day;
         private int[] week;
 
-        public Builder day(String val){
-            day = val;
+        public Builder(Course course){
+            this.id = course.id;
+            this.course = course.course;
+            this.classroom = course.classroom;
+            this.teacher = course.teacher;
+            this.type = course.type;
+            this.sort = course.sort;
+            this.time = course.time;
+        }
+
+        public Builder day(String time){
+            this.day = time.substring(0,3);
+            this.lesson = time.substring(4,7);
+            this.rawWeek = time.substring(8);
             return this;
         }
 

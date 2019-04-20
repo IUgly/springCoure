@@ -1,8 +1,11 @@
 package com.example.demo;
 
 import com.example.demo.dao.Dao;
+import com.example.demo.enums.Singleton;
+import com.example.demo.service.IPickService;
 import com.example.demo.service.IReptileService;
 import com.example.demo.service.Imp.ReptileServiceImp;
+import com.google.gson.Gson;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +24,7 @@ public class DemoApplicationTests {
     @Autowired
     private IReptileService iReptileService;
     @Autowired
-    private ReptileServiceImp reptileServiceImp;
+    private IPickService iPickService;
     @Test
     public void reptileCourse(){
         String studentId = "2017211903";
@@ -38,4 +41,12 @@ public class DemoApplicationTests {
         IntStream.range(2017210001, 2017212200)
                 .forEach(i -> this.iReptileService.reptileTask(String.valueOf(i)));
     }
+
+    @Test
+    public void courseList(){
+        String sId = "2018211903";
+        Gson gson = Singleton.INSTANCE.getGson();
+        System.out.println(gson.toJson(this.iPickService.getClassList(sId)));
+    }
+
 }
