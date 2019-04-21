@@ -33,7 +33,7 @@ public class PickServiceImp implements IPickService {
     }
 
     @Override
-    public Optional<List<Course>> selectiveCourseList(String sId) {
+    public List<Course> selectiveCourseList(String sId) {
         return this.dao.selectCoursesByType(sId, "选修");
     }
 }

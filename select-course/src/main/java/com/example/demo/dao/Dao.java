@@ -51,8 +51,8 @@ public interface Dao {
      * @param cId
      * @return
      */
-    @Delete("delete from record where s_id = #{s_id} AND c_id = #{c_id}")
-    boolean deleteRecord(String sId, String cId);
+    @Delete("delete from record where s_id = #{sId} AND c_id = #{cId}")
+    boolean deleteRecord(@Param("sId") String sId, @Param("cId") String cId);
 
     /**
      * 查询已选课程
@@ -73,11 +73,12 @@ public interface Dao {
      */
     @Select("SELECT * FROM course " +
             "WHERE time NOT IN " +
-            "(SELECT time FROM course,record" +
-            "WHERE course.c_id = record.c_id" +
+            "(SELECT time FROM course,record " +
+            "WHERE course.c_id = record.c_id " +
             "AND record.s_id = #{sId}) " +
             "AND type = #{type}")
-    Optional<List<Course>> selectCoursesByType(@Param("sId") String sId,
+    @Results(@Result(column = "c_id", property = "id"))
+    List<Course> selectCoursesByType(@Param("sId") String sId,
                                                @Param("type") String type);
 
 }

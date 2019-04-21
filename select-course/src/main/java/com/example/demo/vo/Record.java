@@ -25,4 +25,9 @@ public class Record implements Serializable {
     private double grade;
     public Record() {
     }
+
+    public Record(String cId, String sId) {
+        this.cId = cId;
+        this.sId = sId;
+    }
 }

@@ -17,5 +17,5 @@ public interface IPickService {
 
     List<Course> getClassList(String sId);
 
-    Optional<List<Course>> selectiveCourseList(String sId);
+    List<Course> selectiveCourseList(String sId);
 }
